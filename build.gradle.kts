@@ -36,6 +36,7 @@ repositories {
         name = "cobblemonReleases"
         url = uri("https://artefacts.cobblemon.com/releases")
     }
+    maven("https://maven.ladysnake.org/releases/")
 }
 
 dependencies {
@@ -47,6 +48,11 @@ dependencies {
     implementation(kotlin("reflect"))
     modCompileOnly("com.cobblemon:fabric:1.7.1+1.21.1")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
+
+    val ccaVersion = "6.1.0"
+
+    modImplementation("org.ladysnake.cardinal-components-api:cardinal-components-base:$ccaVersion")
+    modImplementation("org.ladysnake.cardinal-components-api:cardinal-components-entity:$ccaVersion")
 }
 
 tasks.processResources {

@@ -5,13 +5,19 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ActiveBattlePokemonMixin",
-    "InteractPokemonHandlerMixin",
-    "PokemonEntityOfferHeldItemMixin",
-    "ProjectileMixin",
+    "CcaComponentKeySyncGuardMixin",
+    "CcaEntitySyncPacketGuardMixin",
+    "ConnectionSyncUninterruptiblyMixin",
+    "FastUtilMapIteratorMixin",
+    "FastUtilObjectSetIteratorMixin",
+    "FastUtilValueIteratorMixin",
     "FixNullProjectileStackEverywhereMixin",
     "FossilMultiblockStructureMixin",
+    "InteractPokemonHandlerMixin",
+    "ItemStackSaveMixin",
+    "PokemonEntityOfferHeldItemMixin",
     "PokeSnackBlockEntityMixin",
-    "ItemStackSaveMixin"
+    "ProjectileMixin"
   ],
   "injectors": {
     "defaultRequire": 1
