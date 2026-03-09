@@ -1,4 +1,4 @@
-{
+﻿{
   "fishingRodHookOverride": {
     "enabled": true,
     "worlds": [
@@ -7,5 +7,45 @@
   },
   "battleSendOutClipOverride": {
     "enabled": false
+  },
+  "needChooseOnFirstJoin": false,
+  "sendReporterSeat": false,
+  "sendReporterMissing": false,
+  "Message": {
+    "clearPc": {
+      "success": "已成功清空玩家 {player} 的宝可梦PC。",
+      "failNoPc": "无法清空玩家 {player} 的PC（PC不存在）。"
+    },
+    "forceTrade": {
+      "slotEmpty": "槽位 {slot} 为空，无法强制进化。",
+      "success": "已为 {player} 的槽位 {slot} 强制触发交易进化：{evolutionId}",
+      "notFound": "未找到匹配的交易进化：{evolutionId}"
+    },
+    "giveAllPokemon": {
+      "success": "已向玩家 {player} 的PC发放全部宝可梦，共 {count} 只。"
+    },
+    "listEvos": {
+      "slotEmpty": "槽位 {slot} 为空，无法获取进化信息。",
+      "none": "该精灵没有可用的进化。",
+      "header": "该精灵的所有 evolutionId：\n",
+      "itemPrefix": "- "
+    },
+    "reloadConfig": {
+      "success": "CobbleBugFix 配置已重新加载，当前世界列表：{worlds}"
+    },
+    "resetStarter": {
+      "success": "已重置玩家 {player} 的初始精灵选择状态为未选择。"
+    },
+    "sourceQuery": {
+      "speciesNotFound": "未找到精灵：{species}",
+      "header": "精灵来源查询: {species}",
+      "speciesLine": "Species JSON来源: 资源={json}, 包={pack}",
+      "ridingLine": "Riding来源: 包={pack}, behaviours={behaviours}",
+      "modelLine": "模型Poser来源: 资源={json}, 包={pack}"
+    },
+    "denyHeldItemWhileEvolving": "§c当前宝可梦正在进化，无法给予携带物！",
+    "starterScreen": {
+      "cannotClose": "§c请先选择初始精灵，无法关闭该界面！"
+    }
   }
 }

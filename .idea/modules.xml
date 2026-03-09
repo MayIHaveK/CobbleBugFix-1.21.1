@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CobbleBugFix.client.iml" filepath="$PROJECT_DIR$/.idea/modules/CobbleBugFix.client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CobbleBugFix.main.iml" filepath="$PROJECT_DIR$/.idea/modules/CobbleBugFix.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CobbleBugFix.test.iml" filepath="$PROJECT_DIR$/.idea/modules/CobbleBugFix.test.iml" />
     </modules>

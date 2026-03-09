@@ -9,14 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.lang.reflect.Field;
+import java.util.NoSuchElementException;
 
 /**
  * Guard against corrupted fastutil iterator state:
  * when c > 0, pos < 0 but wrapped is null -> wrapped.getInt(...) will NPE.
- *
- * We avoid @Shadow because the iterator fields are declared in the parent
- * class (MapIterator), and annotation processor may fail to resolve them
- * when mixing into an inner class via targets="...$ValueIterator".
  */
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 @Mixin(
@@ -29,7 +26,6 @@ public abstract class FastUtilValueIteratorMixin {
 
     @Unique private static volatile boolean cobble$fieldsResolved = false;
 
-    // These are in Int2ObjectOpenHashMap$MapIterator (superclass of ValueIterator)
     @Unique private static Field cobble$fieldPos;
     @Unique private static Field cobble$fieldC;
     @Unique private static Field cobble$fieldLast;
@@ -46,7 +42,6 @@ public abstract class FastUtilValueIteratorMixin {
             cobble$resolveFieldsIfNeeded(this.getClass());
 
             if (cobble$fieldPos == null || cobble$fieldC == null || cobble$fieldWrapped == null) {
-                // If we can't resolve the minimal required fields, do nothing.
                 return;
             }
 
@@ -54,22 +49,19 @@ public abstract class FastUtilValueIteratorMixin {
             int c = cobble$fieldC.getInt(this);
             Object wrapped = cobble$fieldWrapped.get(this);
 
-            // If iterator says it still has elements, but it already underflowed pos (needs wrapped),
-            // and wrapped is null -> nextEntry will NPE.
             if (c > 0 && pos < 0 && wrapped == null) {
-                // Mark exhausted to keep hasNext() consistent
                 cobble$fieldC.setInt(this, 0);
-
-                // Best-effort: reset last so remove() won't act on stale state
                 if (cobble$fieldLast != null) {
                     cobble$fieldLast.setInt(this, -1);
                 }
 
-                LOGGER.info("[Z菌修复]已拦截一次 fastutil ValueIterator 崩溃 (pos<0 && wrapped==null && c>0)");
-                cir.setReturnValue(null);
+                LOGGER.warn("[Z菌修复]拦截fastutil崩溃 (ValueIterator.next: wrapped is null, pos={}, c={})", pos, c);
+                throw new NoSuchElementException("Iterator exhausted (corrupted ValueIterator state)");
             }
+        } catch (NoSuchElementException e) {
+            throw e;
         } catch (Throwable ignored) {
-            // If anything goes wrong, let original behavior continue.
+            // Let original behavior continue.
         }
     }
 
@@ -78,14 +70,9 @@ public abstract class FastUtilValueIteratorMixin {
         if (cobble$fieldsResolved) return;
         cobble$fieldsResolved = true;
 
-        // Walk up the class hierarchy to find fields (they live in MapIterator)
         cobble$fieldPos = cobble$findFieldUpwards(valueIteratorClass, "pos");
         cobble$fieldC = cobble$findFieldUpwards(valueIteratorClass, "c");
-
-        // last may not exist in some variants; optional
         cobble$fieldLast = cobble$findFieldUpwards(valueIteratorClass, "last");
-
-        // wrapped might be renamed in some builds; try common candidates
         cobble$fieldWrapped = cobble$findFieldUpwards(valueIteratorClass,
                 "wrapped",
                 "wrap",

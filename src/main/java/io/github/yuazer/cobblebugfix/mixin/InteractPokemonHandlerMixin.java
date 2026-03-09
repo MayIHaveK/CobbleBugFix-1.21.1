@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.client.gui.interact.wheel.InteractTypePokemon;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket;
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler;
+import io.github.yuazer.cobblebugfix.config.CobbleBugFixConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,9 +44,13 @@ public class InteractPokemonHandlerMixin {
                         || pokemonEntity.getPokemon().getPersistentData().getBoolean("form_changing");
 
         if (evolvingOrChangingForm) {
-            // 只在服务端玩家发提示，避免客户端/假玩家环境出问题
             if (player instanceof ServerPlayer sp) {
-                sp.sendSystemMessage(Component.literal("§c当前宝可梦正在进化，无法给予携带物！"));
+                sp.sendSystemMessage(Component.literal(
+                        CobbleBugFixConfig.getMessage(
+                                "denyHeldItemWhileEvolving",
+                                "§c当前宝可梦正在进化，无法给予携带物！"
+                        )
+                ));
             }
             ci.cancel();
         }

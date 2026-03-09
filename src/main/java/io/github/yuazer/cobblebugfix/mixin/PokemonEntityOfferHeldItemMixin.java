@@ -1,6 +1,7 @@
 package io.github.yuazer.cobblebugfix.mixin;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import io.github.yuazer.cobblebugfix.config.CobbleBugFixConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -26,17 +27,19 @@ public class PokemonEntityOfferHeldItemMixin {
             ItemStack stack,
             CallbackInfoReturnable<Boolean> cir
     ) {
-        // (this) 就是 PokemonEntity
         PokemonEntity self = (PokemonEntity) (Object) this;
         boolean evolvingOrChangingForm =
                 self.isEvolving()
                         || self.getPokemon().getPersistentData().getBoolean("form_changing");
 
-        // 正在进化：禁止给予携带物
         if (evolvingOrChangingForm) {
-            // 只在服务端玩家发提示，避免客户端/假玩家环境出问题
             if (player instanceof ServerPlayer sp) {
-                sp.sendSystemMessage(Component.literal("§c当前宝可梦正在进化，无法给予携带物！"));
+                sp.sendSystemMessage(Component.literal(
+                        CobbleBugFixConfig.getMessage(
+                                "denyHeldItemWhileEvolving",
+                                "§c当前宝可梦正在进化，无法给予携带物！"
+                        )
+                ));
             }
             cir.setReturnValue(false);
         }

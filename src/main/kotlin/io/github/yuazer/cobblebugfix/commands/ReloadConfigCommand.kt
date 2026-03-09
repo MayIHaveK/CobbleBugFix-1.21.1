@@ -1,7 +1,7 @@
-package io.github.yuazer.cobblebugfix.commands
+﻿package io.github.yuazer.cobblebugfix.commands
 
-import io.github.yuazer.cobblebugfix.config.CobbleBugFixConfig
 import com.mojang.brigadier.CommandDispatcher
+import io.github.yuazer.cobblebugfix.config.CobbleBugFixConfig
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
@@ -16,7 +16,17 @@ object ReloadConfigCommand {
                 .executes { ctx ->
                     CobbleBugFixConfig.load()
                     ctx.source.sendSuccess(
-                        { Component.literal("CobbleBugFix 配置已重新加载，当前世界列表：${CobbleBugFixConfig.getConfiguredWorlds()}") },
+                        {
+                            Component.literal(
+                                CobbleBugFixConfig.getMessage(
+                                    key = "reloadConfig.success",
+                                    default = "CobbleBugFix 配置已重新加载，当前世界列表：{worlds}",
+                                    placeholders = mapOf(
+                                        "worlds" to CobbleBugFixConfig.getConfiguredWorlds().toString()
+                                    )
+                                )
+                            )
+                        },
                         true
                     )
                     1

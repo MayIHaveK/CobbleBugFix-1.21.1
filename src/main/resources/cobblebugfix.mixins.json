@@ -15,9 +15,13 @@
     "FossilMultiblockStructureMixin",
     "InteractPokemonHandlerMixin",
     "ItemStackSaveMixin",
+    "OpenPCPacketMixin",
     "PokemonEntityOfferHeldItemMixin",
+    "PokemonPropertiesArgumentTypeMixin",
+    "PokemonSpeciesSourceTrackerMixin",
     "PokeSnackBlockEntityMixin",
-    "ProjectileMixin"
+    "ProjectileMixin",
+    "ServerEntitySendChangesCrashGuardMixin"
   ],
   "injectors": {
     "defaultRequire": 1

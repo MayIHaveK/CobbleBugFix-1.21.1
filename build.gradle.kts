@@ -24,9 +24,12 @@ java {
 }
 
 loom {
+    splitEnvironmentSourceSets()
+
     mods {
         register("cobblebugfix") {
             sourceSet("main")
+            sourceSet("client")
         }
     }
 }

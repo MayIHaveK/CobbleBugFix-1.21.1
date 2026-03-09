@@ -1,4 +1,4 @@
-{
+﻿{
   "schemaVersion": 1,
   "id": "cobblebugfix",
   "version": "${version}",
@@ -8,14 +8,21 @@
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/cobblebugfix/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
+    "client": [
+      "io.github.yuazer.cobbleclientbugfix.client.CobbleclientbugfixClient"
+    ],
     "main": [
       "io.github.yuazer.cobblebugfix.Cobblebugfix"
     ]
   },
   "mixins": [
-    "cobblebugfix.mixins.json"
+    "cobblebugfix.mixins.json",
+    {
+      "config": "cobblebugfix.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
@@ -24,3 +31,4 @@
     "minecraft": "${minecraft_version}"
   }
 }
+

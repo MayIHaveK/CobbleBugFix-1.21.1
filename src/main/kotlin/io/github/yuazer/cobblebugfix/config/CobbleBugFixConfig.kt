@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory
 object CobbleBugFixConfig {
     private const val FISHING_SECTION = "fishingRodHookOverride"
     private const val BATTLE_CLIP_SECTION = "battleSendOutClipOverride"
+    private const val NEED_CHOOSE_ON_FIRST_JOIN = "needChooseOnFirstJoin"
+    private const val SEND_REPORTER_SEAT = "sendReporterSeat"
+    private const val SEND_REPORTER_MISSING = "sendReporterMissing"
+    private const val MESSAGE_SECTION = "Message"
     private val LOGGER = LoggerFactory.getLogger("CobbleBugFixConfig")
 
     @field:Config("cobblebugfix/config.json")
@@ -46,16 +50,58 @@ object CobbleBugFixConfig {
     }
 
     @JvmStatic
+    fun shouldForceChooseStarterOnFirstJoin(): Boolean {
+        if (!::config.isInitialized) {
+            return true
+        }
+        return config.getBoolean(NEED_CHOOSE_ON_FIRST_JOIN, true)
+    }
+
+    @JvmStatic
+    fun shouldSendSeatReporter(): Boolean {
+        if (!::config.isInitialized) {
+            return true
+        }
+        return config.getBoolean(SEND_REPORTER_SEAT, true)
+    }
+
+    @JvmStatic
+    fun shouldSendMissingReporter(): Boolean {
+        if (!::config.isInitialized) {
+            return true
+        }
+        return config.getBoolean(SEND_REPORTER_MISSING, true)
+    }
+
+    @JvmStatic
+    fun getMessage(key: String, default: String): String {
+        if (!::config.isInitialized) {
+            return default
+        }
+        return config.getString("$MESSAGE_SECTION.$key", default) ?: default
+    }
+
+    @JvmStatic
+    fun getMessage(key: String, default: String, placeholders: Map<String, String>): String {
+        var message = getMessage(key, default)
+        placeholders.forEach { (name, value) ->
+            message = message.replace("{$name}", value).replace("%$name%", value)
+        }
+        return message
+    }
+
+    @JvmStatic
     fun logConfigState() {
         if (!::config.isInitialized) {
             LOGGER.info("CobbleBugFix config is not initialized yet.")
             return
         }
         LOGGER.info(
-            "CobbleBugFix config loaded (fishingEnabled={}, worlds={}, battleClipOverride={})",
+            "CobbleBugFix config loaded (fishingEnabled={}, worlds={}, battleClipOverride={}, needChooseOnFirstJoin={})",
             config.getBoolean("$FISHING_SECTION.enabled", false),
             getConfiguredWorlds(),
-            config.getBoolean("$BATTLE_CLIP_SECTION.enabled", false)
+            config.getBoolean("$BATTLE_CLIP_SECTION.enabled", false),
+            shouldForceChooseStarterOnFirstJoin()
         )
     }
 
