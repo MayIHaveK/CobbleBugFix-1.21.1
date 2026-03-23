@@ -9,7 +9,7 @@
     "LivingEntityPickMixin",
     "PosableModelMixin",
     "PokemonClientDelegateMixin",
-    "StorageSlotRenderGuardMixin",
+    "PCGUIUninitGuardMixin",
     "StarterScreenCloseGuardMixin",
     "StarterUIPacketHandlerMixin",
     "VaryingModelRepositorySourceTrackerMixin"
